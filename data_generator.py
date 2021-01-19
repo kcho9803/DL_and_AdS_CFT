@@ -21,23 +21,27 @@ class GeneratedDataset(Dataset):
         eps = 0.1
         n_pos = 0
         n_neg = 0
-        pos = torch.Tensor()
-        neg = torch.Tensor()
-        while (n_pos < 1000)and(n_neg < 1000):
+        pos = torch.empty(0,2)
+        neg = torch.empty(0,2)
+        while (n_pos < 1000)or(n_neg < 1000):
             phi_ini = np.random.uniform(low = 0.0, high = 1.5)
             pi_ini = np.random.uniform(low = -0.2, high = 0.2)
-            rand_input = torch.Tensor([phi_ini, pi_ini])
+            rand_input = torch.Tensor([[phi_ini, pi_ini]])
             out = generator.forward(rand_input)
             if out < eps:
+                print('True data')
                 if n_pos < 1000:
-                    torch.cat((pos, rand_input), dim = 1)
+                    print('Appending')
+                    torch.cat((pos, rand_input), dim = 0)
                     n_pos += 1
             if out > eps:
+                print('False data')
                 if n_neg < 1000:
-                    torch.cat((neg, rand_input), dim = 1)
+                    print('Appending')
+                    torch.cat((neg, rand_input), dim = 0)
                     n_neg += 1
         self.y_data = torch.cat((torch.zeros(1000), torch.ones(1000)), dim = 0)
-        self.x_data = torch.cat((pos, neg), dim = 1)
+        self.x_data = torch.cat((pos, neg), dim = 0)
         print('Dataset generated')
         
         # Set variables for plotting
@@ -74,7 +78,7 @@ class GeneratedDataset(Dataset):
         temp1 = pos.numpy()
         temp2 = neg.numpy()
         ax.scatter(temp1[:, 0], temp1[:, 1], label = 'Positive')
-        ax.scatter(temp2[:, 0], temp2[:, 2], label = "Negative")
+        ax.scatter(temp2[:, 0], temp2[:, 1], label = "Negative")
         ax.legend()
         
         plt.show()

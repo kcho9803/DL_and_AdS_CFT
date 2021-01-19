@@ -6,5 +6,5 @@ save_non_project_files = False
 
 [main]
 version = 0.2.0
-recent_files = ['main.py', 'nn.py']
+recent_files = ['data_generator.py', 'nn.py', 'main.py', '..\\ca2-kcho9803\\python\\q2.py']
 
