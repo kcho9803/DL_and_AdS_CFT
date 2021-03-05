@@ -12,6 +12,10 @@ import torch.nn as nn
 import numpy as np
 import torch.nn.functional as f
 
+# Customized activation function
+def activ(x):
+    return torch.add(x,  torch.tensor([[0, 0.1*x[0][0].item()**3]]))
+
 # Customized output layer
 class outLayer(nn.Module):
     
@@ -19,7 +23,7 @@ class outLayer(nn.Module):
         super(outLayer, self).__init__()
     
     def forward(self, x):
-        F = 2*np.pi/0.1 + x[0][0] - x[0][0]**3
+        F = 2*x[0][1]/0.1 + x[0][0] - x[0][0]**3
         return f.tanh(torch.abs(F))
 
 # Customized output layer for data generation    
@@ -29,7 +33,7 @@ class genLayer(nn.Module):
         super(genLayer, self).__init__()
         
     def forward(self, x):
-        F = 2*np.pi/0.1 + x[0][0] - x[0][0]**3
+        F = 2*x[0][1]/0.1 + x[0][0] - x[0][0]**3
         return torch.abs(F)
 
 # Neural network, eta_ini = 1, eta_fin = 0.1, stepsize = 0.1, N = 10
@@ -52,5 +56,6 @@ class Net(nn.Module):
     def forward(self, x):
         for layer in self.layers:
             x = layer(x)
+            x = activ(x)
         x = self.out(x)
         return x
