@@ -1,0 +1,22 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1614370455287.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "1157109690",
+    "id" : "8F117229",
+    "lastKnownWriteTime" : 1611051680,
+    "last_content_update" : 1611051680,
+    "path" : "D:/Github/DL_and_AdS_CFT/data_generator.py",
+    "project_path" : "data_generator.py",
+    "properties" : {
+        "cursorPosition" : "83,18",
+        "scrollLine" : "61"
+    },
+    "relative_order" : 1,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "python"
+}
