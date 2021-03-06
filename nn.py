@@ -14,7 +14,7 @@ import torch.nn.functional as f
 
 # Customized activation function
 def activ(x):
-    return torch.add(x,  torch.tensor([[0, 0.1*x[0][0].item()**3]]))
+    return torch.add(x,  torch.tensor([[0, -0.1*x[0][0].item()**3]]))
 
 # Customized output layer
 class outLayer(nn.Module):
@@ -36,7 +36,7 @@ class genLayer(nn.Module):
         F = 2*x[0][1]/0.1 + x[0][0] - x[0][0]**3
         return torch.abs(F)
 
-# Neural network, eta_ini = 1, eta_fin = 0.1, stepsize = 0.1, N = 10
+# Neural network, eta_ini = 1, eta_fin = 0.1, delta_eta = -0.1, N = 10
 class Net(nn.Module):
   
     def __init__(self, N = 10, generate = False):
@@ -46,7 +46,7 @@ class Net(nn.Module):
             tempLayer = nn.Linear(2, 2, bias = False)
             if generate:
                 eta = 1 - 0.1*k
-                tempLayer.weight.data = torch.Tensor([[1, 0.1], [-0.1, 1-0.1*3/np.tanh(3*eta)]])
+                tempLayer.weight = nn.Parameter(torch.Tensor([[1, -0.1], [0.1, 1+0.1*3/np.tanh(3*eta)]]))
             self.layers.append(tempLayer)
         if generate:
             self.out = genLayer()

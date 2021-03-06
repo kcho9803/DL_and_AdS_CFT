@@ -18,6 +18,7 @@ class GeneratedDataset(Dataset):
     def __init__(self):
         print('Generating dataset...')
         generator = nn.Net(generate = True)
+        print(generator)
         eps = 0.1
         n_pos = 0
         n_neg = 0
@@ -31,6 +32,8 @@ class GeneratedDataset(Dataset):
             out = generator.forward(rand_input)
             if out < eps:
                 if n_pos < 1000:
+                    if (n_pos+1)%10 == 0:
+                        print('Data Generation: {}%'.format((n_pos+1)/10))
                     pos[n_pos] = rand_input
                     n_pos += 1
             if out > eps:
@@ -82,6 +85,7 @@ class GeneratedDataset(Dataset):
         ax.legend(loc = 'upper right')
         
         plt.show()
+        fig.savefig('Dataset.pdf')
         
     def __len__(self):
         return list(self.x_data.size())[0]
