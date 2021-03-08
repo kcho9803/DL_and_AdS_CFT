@@ -51,6 +51,10 @@ The output layer has 2 input features and 1 output feature. Exact form of the ou
 Application on AdS Schwartzchild Black Hole
 --------------------------------
 
+Data generated using the neural network with exact metric <img src="https://render.githubusercontent.com/render/math?math=h(\eta) = 3 \coth (3 \eta)"> is shown in the figure below. True data points that satisfies the boundary condition of the black hole horizon within the specified accuracy are labeled as 'Positive', and randomly generated false data points are labeled as 'Negative'. Total 2000 data points are generated, 1000 for each class.
+![alt text](https://github.com/kcho9803/DL_and_AdS_CFT/blob/main/Figure_1.png?raw=true)
+
+
 References
 ----------------------
 [1] K. Hashimoto, S. Sugishita, A. Tanaka, and A. Tomiya. (2018). Deep Learning and the AdS/CFT Correspondence. _Phys. Rev. D_ 98 (2018) 4. 046019.
