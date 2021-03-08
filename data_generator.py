@@ -44,8 +44,6 @@ class GeneratedDataset(Dataset):
         self.y_data = torch.cat((torch.zeros(1000), torch.ones(1000)), dim = 0)
         self.x_data = torch.cat((pos, neg), dim = 0)
         print('Dataset generated')
-        print(self.x_data.size())
-        print(self.y_data.size())
         
         # Set variables for plotting
         plt.rcParams["font.family"] = "Times New Roman"

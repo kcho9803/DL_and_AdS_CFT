@@ -24,7 +24,7 @@ class outLayer(nn.Module):
     
     def forward(self, x):
         F = 2*x[0][1]/0.1 + x[0][0] - x[0][0]**3
-        return f.tanh(torch.abs(F))
+        return (f.tanh(100*F-10)-f.tanh(100*F+10)+2)/2
 
 # Customized output layer for data generation    
 class genLayer(nn.Module):
@@ -44,9 +44,11 @@ class Net(nn.Module):
         self.layers = nn.ModuleList()
         for k in range(N):
             tempLayer = nn.Linear(2, 2, bias = False)
+            eta = 1 - 0.1*k
             if generate:
-                eta = 1 - 0.1*k
                 tempLayer.weight = nn.Parameter(torch.Tensor([[1, -0.1], [0.1, 1+0.1*3/np.tanh(3*eta)]]))
+            else:
+                tempLayer.weight = nn.Parameter(torch.Tensor([[1, -0.1],[0.1, 1+0.1*np.random.normal(loc = 1/eta ,scale = 1)]]))
             self.layers.append(tempLayer)
         if generate:
             self.out = genLayer()
@@ -59,3 +61,11 @@ class Net(nn.Module):
             x = activ(x)
         x = self.out(x)
         return x
+
+    def extractMetric(self):
+        # Number of layers = 10
+        metric = np.zeros((10,2))
+        for k in range(10):
+            metric[k][0] = 1 - 0.1*k
+            metric[k][1] = (self.layers[k].weight[1][1].item() - 1) * 10
+        return metric
