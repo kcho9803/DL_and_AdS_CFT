@@ -51,7 +51,19 @@ The output layer has 2 input features and 1 output feature. Exact form of the ou
 Application on AdS Schwartzchild Black Hole
 --------------------------------
 
-Data generated using the neural network with exact metric <img src="https://render.githubusercontent.com/render/math?math=h(\eta) = 3 \coth (3 \eta)"> is shown in the figure below. True data points that satisfies the boundary condition of the black hole horizon within the specified accuracy are labeled as 'Positive', and randomly generated false data points are labeled as 'Negative'. Total 2000 data points are generated, 1000 for each class.
+The neural network will be tested by checking whether it can train and reproduce the AdS Schwartzchild metric.
+
+Boundary condition of the black hole horizon is given as
+
+<img src="https://render.githubusercontent.com/render/math?math=0=F\equiv \left[ \frac{2}{\eta}\pi - m^2 \phi - \frac{\delta V (\phi)}{\delta \phi}\right]_{\eta=\eta_{\mathrm{fin}}}">,
+
+where <img src="https://render.githubusercontent.com/render/math?math=\eta = \eta_{\mathrm{fin}}\approx 0"> is the horizon cutoff, which will be set as a finitely small value for the neural network.
+
+Data points for training are generated using the aforementioned neural network with exact AdS Schwartzchild metric, <img src="https://render.githubusercontent.com/render/math?math=h(\eta) = 3 \coth (3 \eta)">, let us call this data generator. Output layer of the data generator is defined as <img src="https://render.githubusercontent.com/render/math?math=\mathrm{Out}(\phi, \pi) := |F|">.
+<img src="https://render.githubusercontent.com/render/math?math=\eta"> direction is discretized by 10 layers with <img src="https://render.githubusercontent.com/render/math?math=\eta_{\mathrm{ini}}=1"> and <img src="https://render.githubusercontent.com/render/math?math=\eta_{\mathrm{fin}}=0.1">. <img src="https://render.githubusercontent.com/render/math?math=m^2 = -1"> and <img src="https://render.githubusercontent.com/render/math?math=V[\phi]=\frac{1}{4}\phi^4"> is fixed for simplicity.
+
+Data points <img src="https://render.githubusercontent.com/render/math?math=[\phi(\eta_{\mathrm{ini}}),\pi(\eta_{\mathrm{ini}})] \in [0,1.5]\oplus[-0.2,0.2]"> are randomly generated. They are fed to the data generator and labeled as 'Positive' if <img src="https://render.githubusercontent.com/render/math?math=|F| < \epsilon">, and 'Negative' if <img src="https://render.githubusercontent.com/render/math?math=|F| > \epsilon"> where <img src="https://render.githubusercontent.com/render/math?math=\epsilon = 0.1">. Total 2000 data points are generated, 1000 for each class. Plot of the generated data points is shown in the figure below.
+
 ![alt text](https://github.com/kcho9803/DL_and_AdS_CFT/blob/main/Figure_1.png?raw=true)
 
 
