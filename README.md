@@ -4,7 +4,7 @@ Implementation of DL method from (Hashimoto, et al, 2018).
 
 Deep Neural Network Representation of the Scalar Field in AdS Spacetime
 -----------------------
-For a scalar field theory in a <img src="https://render.githubusercontent.com/render/math?math=(d %2B 1)">-dimensional curved spacetime is written as
+For a scalar field theory in a <img src="https://render.githubusercontent.com/render/math?math=(d %2B 1)">-dimensional curved spacetime, the action is written as
 
 <img src="https://render.githubusercontent.com/render/math?math=S = \int d^{d %2B 1}x \sqrt{-\mathrm{det}g} \left[ -\frac{1}{2}(\partial_\mu\phi)^2 - \frac{1}{2}m^2\phi^2 - V(\phi) \right]">.
 
