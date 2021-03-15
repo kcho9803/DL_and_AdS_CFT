@@ -11,6 +11,7 @@ import nn
 from torch.utils.data import Dataset
 import matplotlib as mpl
 import matplotlib.pyplot as plt
+import pandas as pd
 
 class GeneratedDataset(Dataset):
     # Data generation. d = 3, L = 1. metric: h(eta) = 3coth(3eta)
@@ -44,6 +45,9 @@ class GeneratedDataset(Dataset):
         self.y_data = torch.cat((torch.zeros(1000), torch.ones(1000)), dim = 0)
         self.x_data = torch.cat((pos, neg), dim = 0)
         print('Dataset generated')
+        # Save generated dataset
+        df = pd.DataFrame(torch.cat((self.x_data, self.y_data.unsqueeze(0)), dim = 1).numpy(), columns = ['phi','pi','label'])
+        df.to_csv('generatedData.csv', sep = ',')
         
         # Set variables for plotting
         plt.rcParams["font.family"] = "Times New Roman"
@@ -85,6 +89,20 @@ class GeneratedDataset(Dataset):
         plt.show()
         fig.savefig('Dataset.pdf')
         
+    def __len__(self):
+        return list(self.x_data.size())[0]
+    
+    def __getItem__(self, idx):
+        x = self.x_data[idx]
+        y = self.y_data[idx]
+        return x, y
+
+class LoadedDataset(Dataset):
+    def __init__(self):
+        savedDataset = pd.read_csv('generatedDataset.csv', header = 0).to_numpy()
+        self.x_data = torch.Tensor(savedDataset[:][:2])
+        self.y_data = torch.Tensor(np.transpose(savedDataset[:][2]))
+
     def __len__(self):
         return list(self.x_data.size())[0]
     

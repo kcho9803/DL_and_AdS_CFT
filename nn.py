@@ -14,7 +14,7 @@ import torch.nn.functional as f
 
 # Customized activation function
 def activ(x):
-    return torch.add(x,  torch.tensor([[0, -0.1*x[0][0].item()**3]]))
+    return torch.add(x,  torch.Tensor([[0, -0.1*x[0][0].item()**3]]))
 
 # Customized output layer
 class outLayer(nn.Module):
@@ -23,7 +23,7 @@ class outLayer(nn.Module):
         super(outLayer, self).__init__()
     
     def forward(self, x):
-        F = 2*x[0][1]/0.1 + x[0][0] - x[0][0]**3
+        F = 2*x[:][1]/0.1 + x[:][0] - x[:][0]**3
         return (f.tanh(100*F-10)-f.tanh(100*F+10)+2)/2
 
 # Customized output layer for data generation    
