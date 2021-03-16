@@ -1,6 +1,8 @@
 Deep Learning & AdS/CFT
 =======================
 Implementation of DL method from (Hashimoto, et al, 2018).
+Descriptions below are summary of (Hashimoto, et al, 2018).
+The figures are generated using the codes in this repo.
 
 Deep Neural Network Representation of the Scalar Field in AdS Spacetime
 -----------------------
