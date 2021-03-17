@@ -13,38 +13,47 @@ import torch.optim as optim
 import torch.nn as NN
 import numpy as np
 
-# Generate dataset
-dataset = data_generator.GeneratedDataset()
+path = 'D:\\Github\\DL_and_AdS_CFT\\'
+
+load = True
+if load:
+    dataset = data_generator.LoadedDataset()
+else:
+    # Generate dataset
+    dataset = data_generator.GeneratedDataset()
 dataloader = DataLoader(dataset, batch_size = 10, shuffle = True)
 
 # Set neural network
 model = nn.Net(generate = False)
+print('Neural network set')
 
 # Extract initialized metric
 initMetric = model.extractMetric()
+print('Initial metric extracted')
 
 # Set loss function & optimizer
 criterion = NN.L1Loss(reduction = 'sum')
-optimizer = optim.Adam(model.parameters(), lr = 0.001)
+optimizer = optim.Adam(model.parameters(), lr = 0.0001)
 
 epochs = 100
 losses = []
 c_reg = 0.001
 
 # Training
+print('Beginning training sequence')
 for curEpoch in range(epochs):
     batch_loss = 0.0
     for x, y in dataloader:
         optimizer.zero_grad()
         y_pred = model(x)
         tempMetric = model.extractMetric()
-        loss = criterion(y_pred.view_as(y), y) + c_reg * np.sum(np.multiply(np.power(tempMetric[:9][0],4), np.power(tempMetric[1:][1]-tempMetric[:9][1], 2)))
+        loss = criterion(y_pred.view_as(y), y) + c_reg * np.sum(np.multiply(np.power(tempMetric[:9,0],4), np.power(tempMetric[1:,1]-tempMetric[:9,1], 2)))
         loss.backward()
         optimizer.step()
         batch_loss += loss.item()
         # Apply constraint
         for layer in model.layers:
-            layer.weight = NN.Parameter(torch.Tensor([[1, -0.1],[0.1, layer.weight[1][1].item()]]))
+            layer.weight = NN.Parameter(torch.Tensor([[1, -0.1],[0.1, layer.weight[1,1].item()]]))
     losses.append(batch_loss)
     print("Epoch {0}: Loss = {1}".format(curEpoch+1, batch_loss))
 print("Training complete")
@@ -87,25 +96,19 @@ height = width * 0.9
 fig1, ax1 = plt.subplots(figsize = (width, height))
 ax1.plot(np.arange(100)+1, losses, label = 'Loss')
 ax1.legend(loc = 'upper right')
-        
-plt.show()
-fig1.savefig('TrainingLoss.pdf')
+fig1.savefig(path+'TrainingLoss.pdf')
 
 # Plot trained metric
 trainedMetric = model.extractMetric()
 fig2, ax2 = plt.subplots(figsize = (width, height))
-ax2.plot(trainedMetric[:][0], trainedMetric[:][1], label = 'Emergent Metric')
-ax2.plot(trainedMetric[:][0], 3*np.ones_like(trainedMetric[:][0])/np.tanh(3*trainedMetric[:][0]), label = 'True Metric')
+ax2.plot(trainedMetric[:,0], trainedMetric[:,1], label = 'Emergent Metric')
+ax2.plot(trainedMetric[:,0], 3*np.ones_like(trainedMetric[:,0])/np.tanh(3*trainedMetric[:,0]), label = 'True Metric')
 ax2.legend(loc = 'upper right')
-
-plt.show()
-fig2.savefig('TrainedMetric.pdf')
+fig2.savefig(path+'TrainedMetric.pdf')
 
 # Plot initial metric
 fig3, ax3 = plt.subplots(figsize = (width, height))
-ax3.plot(initialMetric[:][0], initialMetric[:][1], label = 'Emergent Metric')
-ax3.plot(initialMetric[:][0], 3*np.ones_like(initialMetric[:][0])/np.tanh(3*initialMetric[:][0]), label = 'True Metric')
+ax3.plot(initMetric[:,0], initMetric[:,1], label = 'Emergent Metric')
+ax3.plot(initMetric[:,0], 3*np.ones_like(initMetric[:,0])/np.tanh(3*initMetric[:,0]), label = 'True Metric')
 ax3.legend(loc = 'upper right')
-
-plt.show()
-fig3.savefig('InitialMetric.pdf')
+fig3.savefig(path+'InitialMetric.pdf')

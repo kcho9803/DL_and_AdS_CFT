@@ -19,7 +19,6 @@ class GeneratedDataset(Dataset):
     def __init__(self):
         print('Generating dataset...')
         generator = nn.Net(generate = True)
-        print(generator)
         eps = 0.1
         n_pos = 0
         n_neg = 0
@@ -33,7 +32,7 @@ class GeneratedDataset(Dataset):
             out = generator.forward(rand_input)
             if out < eps:
                 if n_pos < 1000:
-                    if (n_pos+1)%10 == 0:
+                    if (n_pos+1)%50 == 0:
                         print('Data Generation: {}%'.format((n_pos+1)/10))
                     pos[n_pos] = rand_input
                     n_pos += 1
@@ -46,8 +45,11 @@ class GeneratedDataset(Dataset):
         self.x_data = torch.cat((pos, neg), dim = 0)
         print('Dataset generated')
         # Save generated dataset
-        df = pd.DataFrame(torch.cat((self.x_data, self.y_data.unsqueeze(0)), dim = 1).numpy(), columns = ['phi','pi','label'])
-        df.to_csv('generatedData.csv', sep = ',')
+        df = pd.DataFrame(torch.cat((self.x_data, torch.transpose(self.y_data.unsqueeze(0),0,1)), dim = 1).numpy(), columns = ['phi','pi','label'])
+        # Specify path
+        path = 'D:\\Github\\DL_and_AdS_CFT\\'
+        df.to_csv(path+'generatedDataset.csv', sep = ',')
+        print('Dataset saved')
         
         # Set variables for plotting
         plt.rcParams["font.family"] = "Times New Roman"
@@ -85,28 +87,34 @@ class GeneratedDataset(Dataset):
         ax.scatter(temp1[:, 0], temp1[:, 1], label = 'Positive', marker = '.')
         ax.scatter(temp2[:, 0], temp2[:, 1], label = 'Negative', marker = '.')
         ax.legend(loc = 'upper right')
-        
-        plt.show()
-        fig.savefig('Dataset.pdf')
+        fig.savefig(path+'Dataset.pdf')
         
     def __len__(self):
         return list(self.x_data.size())[0]
     
-    def __getItem__(self, idx):
+    def __getitem__(self, idx):
         x = self.x_data[idx]
         y = self.y_data[idx]
         return x, y
 
 class LoadedDataset(Dataset):
     def __init__(self):
-        savedDataset = pd.read_csv('generatedDataset.csv', header = 0).to_numpy()
-        self.x_data = torch.Tensor(savedDataset[:][:2])
-        self.y_data = torch.Tensor(np.transpose(savedDataset[:][2]))
+        # Specify path
+        path = 'D:\\Github\\DL_and_AdS_CFT\\'
+        savedDataset = pd.read_csv(path+'generatedDataset.csv', header = 0).to_numpy()
+        print(np.shape(savedDataset))
+        self.x_data = torch.Tensor(savedDataset[:,1:3])
+        print(np.shape(savedDataset[:,1:3]))
+        print(self.x_data.shape)
+        self.y_data = torch.Tensor(np.squeeze(np.transpose(savedDataset[:,3])))
+        print(np.shape(savedDataset[:,3]))
+        print(self.y_data.shape)
+        print('Dataset loaded')
 
     def __len__(self):
         return list(self.x_data.size())[0]
     
-    def __getItem__(self, idx):
+    def __getitem__(self, idx):
         x = self.x_data[idx]
         y = self.y_data[idx]
         return x, y
