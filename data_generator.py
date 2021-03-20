@@ -102,13 +102,11 @@ class LoadedDataset(Dataset):
         # Specify path
         path = 'D:\\Github\\DL_and_AdS_CFT\\'
         savedDataset = pd.read_csv(path+'generatedDataset.csv', header = 0).to_numpy()
-        print(np.shape(savedDataset))
+        print(savedDataset[0,:])
         self.x_data = torch.Tensor(savedDataset[:,1:3])
-        print(np.shape(savedDataset[:,1:3]))
-        print(self.x_data.shape)
+        print(savedDataset[0,1:3])
         self.y_data = torch.Tensor(np.squeeze(np.transpose(savedDataset[:,3])))
-        print(np.shape(savedDataset[:,3]))
-        print(self.y_data.shape)
+        print(savedDataset[0,3])
         print('Dataset loaded')
 
     def __len__(self):

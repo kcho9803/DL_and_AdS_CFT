@@ -33,21 +33,24 @@ print('Initial metric extracted')
 
 # Set loss function & optimizer
 criterion = NN.L1Loss(reduction = 'sum')
-optimizer = optim.Adam(model.parameters(), lr = 0.0001)
+optimizer = optim.Adam(model.parameters(), lr = 0.1)
 
-epochs = 100
+epochs = 1000
 losses = []
-c_reg = 0.001
+c_reg = 0.003
 
 # Training
 print('Beginning training sequence')
+torch.autograd.set_detect_anomaly(True)
 for curEpoch in range(epochs):
     batch_loss = 0.0
     for x, y in dataloader:
         optimizer.zero_grad()
         y_pred = model(x)
-        tempMetric = model.extractMetric()
-        loss = criterion(y_pred.view_as(y), y) + c_reg * np.sum(np.multiply(np.power(tempMetric[:9,0],4), np.power(tempMetric[1:,1]-tempMetric[:9,1], 2)))
+        regularizer = torch.zeros(1)
+        for i in range(9):
+            regularizer += ((1-0.1*i)**4)*((model.layers[i+1].weight[1,1]-model.layers[i].weight[1,1])**2)
+        loss = criterion(y_pred.view_as(y), y) + c_reg * regularizer
         loss.backward()
         optimizer.step()
         batch_loss += loss.item()
@@ -94,7 +97,7 @@ height = width * 0.9
 
 # Plot loss
 fig1, ax1 = plt.subplots(figsize = (width, height))
-ax1.plot(np.arange(100)+1, losses, label = 'Loss')
+ax1.plot(np.arange(epochs)+1, losses, label = 'Loss')
 ax1.legend(loc = 'upper right')
 fig1.savefig(path+'TrainingLoss.pdf')
 

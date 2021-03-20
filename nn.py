@@ -10,7 +10,6 @@ Created on Wed Jan  6 17:24:27 2021
 import torch
 import torch.nn as nn
 import numpy as np
-import torch.nn.functional as f
 
 # Customized activation function
 def activ(x):
@@ -24,7 +23,7 @@ class outLayer(nn.Module):
     
     def forward(self, x):
         F = 2*x[:,1]/0.1 + x[:,0] - x[:,0]**3
-        return (f.tanh(100*F-10)-f.tanh(100*F+10)+2)/2
+        return (torch.tanh(100*F-10)-torch.tanh(100*F+10)+2)/2
 
 # Customized output layer for data generation    
 class genLayer(nn.Module):
