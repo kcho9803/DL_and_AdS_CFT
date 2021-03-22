@@ -28,7 +28,7 @@ To represent this equation of motion as a deep neural network, it can be discret
 
 <img src="https://render.githubusercontent.com/render/math?math=\pi(\eta %2B \Delta \eta)=\pi(\eta) - \Delta \eta \left( h(\eta)\pi(\eta) - m^2\phi(\eta) - \frac{\delta V(\phi)}{\delta \phi(\eta)} \right)">.
 
-Input vector for the neural network will be <img src="https://render.githubusercontent.com/render/math?math=[x_1,x_2]^T = [\eta(\infty),\pi(\infty)]^T">, and it will propagate along the neural network, up to the black hole horizon at <img src="https://render.githubusercontent.com/render/math?math=\eta=0">. Each layer will be a fully connected layer with 2 input and output features. Weight matrix for n-th layer corresponds to the discretized equation of motion is
+Input vector for the neural network will be <img src="https://render.githubusercontent.com/render/math?math=[x_1,x_2]^T = [\phi(\infty),\pi(\infty)]^T">, and it will propagate along the neural network, up to the black hole horizon at <img src="https://render.githubusercontent.com/render/math?math=\eta=0">. Each layer will be a fully connected layer with 2 input and output features. Weight matrix for n-th layer corresponds to the discretized equation of motion is
 
 <img src=
 "https://render.githubusercontent.com/render/math?math=%5Cdisplaystyle+W%5E%7B%28n%29%7D+%3D+%5Cleft%5B+%5Cbegin%7Bmatrix%7D%0A1+%26+%5CDelta+%5Ceta+%5C%5C%0A%5CDelta+%5Ceta+m%5E2+%26+1+-+%5CDelta+%5Ceta+h%28%5Ceta%5E%7B%28n%29%7D%29%0A%5Cend%7Bmatrix%7D+%5Cright%5D%0A" 
