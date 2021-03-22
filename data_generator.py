@@ -36,7 +36,7 @@ class GeneratedDataset(Dataset):
                         print('Data Generation: {}%'.format((n_pos+1)/10))
                     pos[n_pos] = rand_input
                     n_pos += 1
-            if out > eps:
+            elif out > eps:
                 if n_neg < 1000:
                     neg[n_neg] = rand_input
                     n_neg += 1

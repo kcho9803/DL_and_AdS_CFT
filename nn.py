@@ -13,7 +13,9 @@ import numpy as np
 
 # Customized activation function
 def activ(x):
-    return torch.add(x,  torch.Tensor([[0, -0.1*x[0,0].item()**3]]))
+    x = x.clone()
+    x.data[0,1] -= 0.1*x[0,0]**3
+    return x
 
 # Customized output layer
 class outLayer(nn.Module):
@@ -41,13 +43,14 @@ class Net(nn.Module):
     def __init__(self, N = 10, generate = False):
         super(Net, self).__init__()
         self.layers = nn.ModuleList()
-        for k in range(N):
+        for k in range(N-1):
             tempLayer = nn.Linear(2, 2, bias = False)
-            eta = 1 - 0.1*k
+            eta = 1 - 0.1*(k+1)
             if generate:
                 tempLayer.weight = nn.Parameter(torch.Tensor([[1, -0.1], [0.1, 1+0.1*3/np.tanh(3*eta)]]))
             else:
-                tempLayer.weight = nn.Parameter(torch.Tensor([[1, -0.1],[0.1, 1+0.1*np.random.normal(loc = 1/eta ,scale = 1)]]))
+                #tempLayer.weight = nn.Parameter(torch.Tensor([[1, -0.1],[0.1, 1+0.1*np.random.normal(loc = 1/eta ,scale = 1)]]))
+                tempLayer.weight = nn.Parameter(torch.Tensor([[1, -0.1], [0.1, 1+0.1*3/np.tanh(3*eta)]]))
             self.layers.append(tempLayer)
         if generate:
             self.out = genLayer()
@@ -63,8 +66,8 @@ class Net(nn.Module):
 
     def extractMetric(self):
         # Number of layers = 10
-        metric = np.zeros((10,2))
-        for k in range(10):
-            metric[k,0] = 1 - 0.1*k
+        metric = np.zeros((9,2))
+        for k in range(9):
+            metric[k,0] = 1 - 0.1*(k+1)
             metric[k,1] = (self.layers[k].weight[1,1].item() - 1) * 10
         return metric

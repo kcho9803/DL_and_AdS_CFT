@@ -15,7 +15,7 @@ import numpy as np
 
 path = 'D:\\Github\\DL_and_AdS_CFT\\'
 
-load = True
+load = False
 if load:
     dataset = data_generator.LoadedDataset()
 else:
@@ -35,9 +35,11 @@ print('Initial metric extracted')
 criterion = NN.L1Loss(reduction = 'sum')
 optimizer = optim.Adam(model.parameters(), lr = 0.1)
 
-epochs = 1000
+epochs = 100
 losses = []
 c_reg = 0.003
+
+test = True
 
 # Training
 print('Beginning training sequence')
@@ -47,8 +49,12 @@ for curEpoch in range(epochs):
     for x, y in dataloader:
         optimizer.zero_grad()
         y_pred = model(x)
+        if test:
+            print(y_pred)
+            print(y)
+            test = False
         regularizer = torch.zeros(1)
-        for i in range(9):
+        for i in range(8):
             regularizer += ((1-0.1*i)**4)*((model.layers[i+1].weight[1,1]-model.layers[i].weight[1,1])**2)
         loss = criterion(y_pred.view_as(y), y) + c_reg * regularizer
         loss.backward()
