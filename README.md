@@ -66,8 +66,24 @@ Data points for training are generated using the aforementioned neural network w
 
 Data points <img src="https://render.githubusercontent.com/render/math?math=[\phi(\eta_{\mathrm{ini}}),\pi(\eta_{\mathrm{ini}})] \in [0,1.5]\oplus[-0.2,0.2]"> are randomly generated. They are fed to the data generator and labeled as 'Positive' if <img src="https://render.githubusercontent.com/render/math?math=|F| < \epsilon">, and 'Negative' if <img src="https://render.githubusercontent.com/render/math?math=|F| > \epsilon"> where <img src="https://render.githubusercontent.com/render/math?math=\epsilon = 0.1">. Total 2000 data points are generated, 1000 for each class. Plot of the generated data points is shown in the figure below.
 
-![alt text](https://github.com/kcho9803/DL_and_AdS_CFT/blob/main/Figure_1.png?raw=true)
+![alt text](https://github.com/kcho9803/DL_and_AdS_CFT/blob/main/Dataset.pdf?raw=true)
 
+The model was learned using Adam optimizer.
+
+Latest training loss
+
+![alt text](https://github.com/kcho9803/DL_and_AdS_CFT/blob/main/TrainingLoss.pdf?raw=true)
+
+Metric before training
+
+![alt text](https://github.com/kcho9803/DL_and_AdS_CFT/blob/main/InitialMetric.pdf?raw=true)
+
+Metric after training
+
+![alt text](https://github.com/kcho9803/DL_and_AdS_CFT/blob/main/TrainedMetric.pdf?raw=true)
+
+The optimal loss is about 37, while the error tolerance of the reference is 0.002.
+Loss is stuck over 995 and fixing this is in progress.
 
 References
 ----------------------
