@@ -25,21 +25,31 @@ class GeneratedDataset(Dataset):
         pos = torch.zeros(1000,2)
         neg = torch.zeros(1000,2)
         itr = 0
+        test1 = True
+        test2 = True
         while (n_pos < 1000)or(n_neg < 1000):
             phi_ini = np.random.uniform(low = 0.0, high = 1.5)
             pi_ini = np.random.uniform(low = -0.2, high = 0.2)
             rand_input = torch.Tensor([[phi_ini, pi_ini]])
-            out = generator.forward(rand_input)
+            out = generator(rand_input)
             if out < eps:
                 if n_pos < 1000:
                     if (n_pos+1)%50 == 0:
                         print('Data Generation: {}%'.format((n_pos+1)/10))
+                    if test1:
+                        print('Label = 0, out = {}'.format(out.item()))
                     pos[n_pos] = rand_input
                     n_pos += 1
             elif out > eps:
                 if n_neg < 1000:
+                    if test2:
+                        print('Label = 1, out = {}'.format(out.item()))
                     neg[n_neg] = rand_input
                     n_neg += 1
+            if n_pos > 5:
+                test1 = False
+            if n_neg > 5:
+                test2 = False
             itr += 1
         self.y_data = torch.cat((torch.zeros(1000), torch.ones(1000)), dim = 0)
         self.x_data = torch.cat((pos, neg), dim = 0)

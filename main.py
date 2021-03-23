@@ -13,9 +13,12 @@ import torch.optim as optim
 import torch.nn as NN
 import numpy as np
 
+def L1(y_bar, y):
+    return torch.sum(torch.abs(y_bar - y))
+
 path = 'D:\\Github\\DL_and_AdS_CFT\\'
 
-load = False
+load = True
 if load:
     dataset = data_generator.LoadedDataset()
 else:
@@ -35,17 +38,20 @@ print('Initial metric extracted')
 criterion = NN.L1Loss(reduction = 'sum')
 optimizer = optim.Adam(model.parameters(), lr = 0.1)
 
-epochs = 100
+epochs = 1000
 losses = []
+norms = []
+regs = []
 c_reg = 0.003
 
 test = True
 
 # Training
 print('Beginning training sequence')
-torch.autograd.set_detect_anomaly(True)
 for curEpoch in range(epochs):
     batch_loss = 0.0
+    batch_norm = 0.0
+    batch_reg = 0.0
     for x, y in dataloader:
         optimizer.zero_grad()
         y_pred = model(x)
@@ -60,11 +66,15 @@ for curEpoch in range(epochs):
         loss.backward()
         optimizer.step()
         batch_loss += loss.item()
+        batch_norm += criterion(y_pred.view_as(y), y).item()
+        batch_reg += regularizer.item() * c_reg
         # Apply constraint
         for layer in model.layers:
             layer.weight = NN.Parameter(torch.Tensor([[1, -0.1],[0.1, layer.weight[1,1].item()]]))
     losses.append(batch_loss)
-    print("Epoch {0}: Loss = {1}".format(curEpoch+1, batch_loss))
+    norms.append(batch_norm)
+    regs.append(batch_reg)
+    print("Epoch {0}: Loss = {1}, L1 = {2}, reg = {3}".format(curEpoch+1, batch_loss, batch_norm, batch_reg))
 print("Training complete")
 
 # Plot loss
@@ -121,3 +131,15 @@ ax3.plot(initMetric[:,0], initMetric[:,1], label = 'Emergent Metric')
 ax3.plot(initMetric[:,0], 3*np.ones_like(initMetric[:,0])/np.tanh(3*initMetric[:,0]), label = 'True Metric')
 ax3.legend(loc = 'upper right')
 fig3.savefig(path+'InitialMetric.pdf')
+
+# Plot L1 norm
+fig4, ax4 = plt.subplots(figsize = (width, height))
+ax4.plot(np.arange(epochs)+1, norms, label = 'L1')
+ax4.legend(loc = 'upper right')
+fig4.savefig(path+'TrainingLoss_L1.pdf')
+
+# Plot regularizer
+fig5, ax5 = plt.subplots(figsize = (width, height))
+ax5.plot(np.arange(epochs)+1, regs, label = 'Reg')
+ax5.legend(loc = 'upper right')
+fig5.savefig(path+'TrainingLoss_reg.pdf')
