@@ -115,7 +115,7 @@ height = width * 0.9
 fig1, ax1 = plt.subplots(figsize = (width, height))
 ax1.plot(np.arange(epochs)+1, losses, label = 'Loss')
 ax1.legend(loc = 'upper right')
-fig1.savefig(path+'TrainingLoss.pdf')
+fig1.savefig(path+'TrainingLoss.png')
 
 # Plot trained metric
 trainedMetric = model.extractMetric()
@@ -123,23 +123,23 @@ fig2, ax2 = plt.subplots(figsize = (width, height))
 ax2.plot(trainedMetric[:,0], trainedMetric[:,1], label = 'Emergent Metric')
 ax2.plot(trainedMetric[:,0], 3*np.ones_like(trainedMetric[:,0])/np.tanh(3*trainedMetric[:,0]), label = 'True Metric')
 ax2.legend(loc = 'upper right')
-fig2.savefig(path+'TrainedMetric.pdf')
+fig2.savefig(path+'TrainedMetric.png')
 
 # Plot initial metric
 fig3, ax3 = plt.subplots(figsize = (width, height))
 ax3.plot(initMetric[:,0], initMetric[:,1], label = 'Emergent Metric')
 ax3.plot(initMetric[:,0], 3*np.ones_like(initMetric[:,0])/np.tanh(3*initMetric[:,0]), label = 'True Metric')
 ax3.legend(loc = 'upper right')
-fig3.savefig(path+'InitialMetric.pdf')
+fig3.savefig(path+'InitialMetric.png')
 
 # Plot L1 norm
 fig4, ax4 = plt.subplots(figsize = (width, height))
 ax4.plot(np.arange(epochs)+1, norms, label = 'L1')
 ax4.legend(loc = 'upper right')
-fig4.savefig(path+'TrainingLoss_L1.pdf')
+fig4.savefig(path+'TrainingLoss_L1.png')
 
 # Plot regularizer
 fig5, ax5 = plt.subplots(figsize = (width, height))
 ax5.plot(np.arange(epochs)+1, regs, label = 'Reg')
 ax5.legend(loc = 'upper right')
-fig5.savefig(path+'TrainingLoss_reg.pdf')
+fig5.savefig(path+'TrainingLoss_reg.png')

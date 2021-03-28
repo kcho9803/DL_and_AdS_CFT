@@ -97,7 +97,7 @@ class GeneratedDataset(Dataset):
         ax.scatter(temp1[:, 0], temp1[:, 1], label = 'Positive', marker = '.')
         ax.scatter(temp2[:, 0], temp2[:, 1], label = 'Negative', marker = '.')
         ax.legend(loc = 'upper right')
-        fig.savefig(path+'Dataset.pdf')
+        fig.savefig(path+'Dataset.png')
         
     def __len__(self):
         return list(self.x_data.size())[0]

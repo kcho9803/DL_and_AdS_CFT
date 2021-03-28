@@ -24,7 +24,7 @@ class outLayer(nn.Module):
         super(outLayer, self).__init__()
     
     def forward(self, x):
-        F = 20*x[:,1] + x[:,0] - torch.pow(x[:,0], 3)
+        F = 20*x[:,1] #+ x[:,0] - torch.pow(x[:,0], 3)
         return (torch.tanh(100*(F-0.1))-torch.tanh(100*(F+0.1))+2)/2
         #return torch.abs(F)
 
