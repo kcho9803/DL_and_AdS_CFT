@@ -24,7 +24,7 @@ if load:
 else:
     # Generate dataset
     dataset = data_generator.GeneratedDataset()
-dataloader = DataLoader(dataset, batch_size = 10, shuffle = True)
+dataloader = DataLoader(dataset, batch_size = 500, shuffle = True)
 
 # Set neural network
 model = nn.Net(generate = False)
@@ -60,7 +60,7 @@ for curEpoch in range(epochs):
             print(y)
             test = False
         regularizer = torch.zeros(1)
-        for i in range(8):
+        for i in range(9):
             regularizer += ((1-0.1*i)**4)*((model.layers[i+1].weight[1,1]-model.layers[i].weight[1,1])**2)
         loss = criterion(y_pred.view_as(y), y) + c_reg * regularizer
         loss.backward()

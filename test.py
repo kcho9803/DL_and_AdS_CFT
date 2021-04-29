@@ -10,7 +10,7 @@ dataloader = DataLoader(dataset, batch_size = 1, shuffle = False)
 generator = nn.Net(generate = True)
 network = nn.Net(generate = False)
 
-print('Output test for 10 data points:')
+print('Output test for 2000 data points:')
 i = 0
 L1 = 0
 for x, y in dataloader:
@@ -18,7 +18,9 @@ for x, y in dataloader:
     net_y = network(x)
     #print('Data {}: Generator = {}, Network = {}'.format(i+1,gen_y.item(),net_y.item()))
     i += 1
+    if torch.abs(net_y - y) > 10e-3:
+        print('Data {}: Label = {}, Pred = {}'.format(i, y.item(), net_y.item()))
     L1 += torch.abs(net_y - y)
-    if i > 9:
+    if i > 1999:
         break
-print(L1)
+print(L1.item())

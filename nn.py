@@ -24,7 +24,7 @@ class outLayer(nn.Module):
         super(outLayer, self).__init__()
     
     def forward(self, x):
-        F = 20*x[:,1] #+ x[:,0] - torch.pow(x[:,0], 3)
+        F = 20*x[:,1] + x[:,0] - torch.pow(x[:,0], 3)
         return (torch.tanh(100*(F-0.1))-torch.tanh(100*(F+0.1))+2)/2
         #return torch.abs(F)
 
@@ -44,7 +44,7 @@ class Net(nn.Module):
     def __init__(self, N = 10, generate = False):
         super(Net, self).__init__()
         self.layers = nn.ModuleList()
-        for k in range(N-1):
+        for k in range(N):
             tempLayer = nn.Linear(2, 2, bias = False)
             eta = 1 - 0.1*k
             #tempLayer.weight = nn.Parameter(torch.Tensor([[1, -0.1], [0.1, 1+0.1*3/np.tanh(3*eta)]]))
@@ -68,8 +68,8 @@ class Net(nn.Module):
 
     def extractMetric(self):
         # Number of layers = 10
-        metric = np.zeros((9,2))
-        for k in range(9):
+        metric = np.zeros((10,2))
+        for k in range(10):
             metric[k,0] = 1 - 0.1*k
             metric[k,1] = (self.layers[k].weight[1,1].item() - 1) * 10
         return metric
