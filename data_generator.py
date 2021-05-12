@@ -7,7 +7,7 @@ Created on Wed Jan  6 16:19:06 2021
 
 import numpy as np
 import torch
-import nn
+import nn2 as nn
 from torch.utils.data import Dataset
 import matplotlib as mpl
 import matplotlib.pyplot as plt
@@ -57,7 +57,7 @@ class GeneratedDataset(Dataset):
         # Save generated dataset
         df = pd.DataFrame(torch.cat((self.x_data, torch.transpose(self.y_data.unsqueeze(0),0,1)), dim = 1).numpy(), columns = ['phi','pi','label'])
         # Specify path
-        path = 'D:\\Github\\DL_and_AdS_CFT\\'
+        path = 'E:\\Github\\DL_and_AdS_CFT\\'
         df.to_csv(path+'generatedDataset.csv', sep = ',')
         print('Dataset saved')
         
@@ -110,7 +110,7 @@ class GeneratedDataset(Dataset):
 class LoadedDataset(Dataset):
     def __init__(self):
         # Specify path
-        path = 'D:\\Github\\DL_and_AdS_CFT\\'
+        path = 'E:\\Github\\DL_and_AdS_CFT\\'
         savedDataset = pd.read_csv(path+'generatedDataset.csv', header = 0).to_numpy()
         print(savedDataset[0,:])
         self.x_data = torch.Tensor(savedDataset[:,1:3])

@@ -6,7 +6,7 @@ Created on Wed Jan  6 23:32:57 2021
 """
 
 import data_generator
-import nn
+import nn2 as nn
 import torch
 from torch.utils.data import DataLoader
 import torch.optim as optim
@@ -16,7 +16,7 @@ import numpy as np
 def L1(y_bar, y):
     return torch.sum(torch.abs(y_bar - y))
 
-path = 'D:\\Github\\DL_and_AdS_CFT\\'
+path = 'E:\\Github\\DL_and_AdS_CFT\\'
 
 load = True
 if load:
@@ -36,13 +36,13 @@ print('Initial metric extracted')
 
 # Set loss function & optimizer
 criterion = NN.L1Loss(reduction = 'sum')
-optimizer = optim.Adam(model.parameters(), lr = 0.1)
+optimizer = optim.Adam(model.parameters(), lr = 0.003)
 
-epochs = 1000
+epochs = 3000
 losses = []
 norms = []
 regs = []
-c_reg = 0.003
+c_reg = 0.0003
 
 test = True
 
@@ -61,7 +61,8 @@ for curEpoch in range(epochs):
             test = False
         regularizer = torch.zeros(1)
         for i in range(9):
-            regularizer += ((1-0.1*i)**4)*((model.layers[i+1].weight[1,1]-model.layers[i].weight[1,1])**2)
+            # regularizer += ((1-0.1*i)**4)*((model.layers[i+1].weight[1,1]-model.layers[i].weight[1,1])**2)
+            regularizer += ((1-0.1*i)**4)*((model.layers[i+1].weight[0]-model.layers[i].weight[0])**2)
         loss = criterion(y_pred.view_as(y), y) + c_reg * regularizer
         loss.backward()
         optimizer.step()
@@ -69,8 +70,8 @@ for curEpoch in range(epochs):
         batch_norm += criterion(y_pred.view_as(y), y).item()
         batch_reg += regularizer.item() * c_reg
         # Apply constraint
-        for layer in model.layers:
-            layer.weight = NN.Parameter(torch.Tensor([[1, -0.1],[0.1, layer.weight[1,1].item()]]))
+        # for layer in model.layers:
+        #     layer.weight = NN.Parameter(torch.Tensor([[1, -0.1],[0.1, layer.weight[1,1].item()]]))
     losses.append(batch_loss)
     norms.append(batch_norm)
     regs.append(batch_reg)
