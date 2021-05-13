@@ -50,6 +50,15 @@ alt="\begin{align*}
 
 The output layer has 2 input features and 1 output feature. Exact form of the output layer will be explained in the next section.
 
+Modified Neural Network Structure (Added on 2021.05.12.)
+------------------------------------------
+
+Aforementioned neural network with 2x2 linear layers could not reduce the loss less than around 980.
+
+nn2.py is based on the same neural network representation, but it consists of 1x1 linear layers and the matrix multiplication part is done manually.
+
+This neural network could decrease the loss around 2, but the learned metric is somewhat filpped.
+
 Application on AdS Schwartzchild Black Hole
 --------------------------------
 
@@ -82,8 +91,9 @@ Metric after training
 
 ![alt text](https://github.com/kcho9803/DL_and_AdS_CFT/blob/main/TrainedMetric.png?raw=true)
 
-The optimal loss is about 37, while the error tolerance of the reference is 0.002.
-Loss is stuck over 995 and fixing this is in progress.
+Loss is decreased around 2, which is a large progress.
+However, the learned metric looks somewhat flipped, despite the small error.
+There must be some silly mistake in the code.
 
 References
 ----------------------
