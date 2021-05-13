@@ -57,7 +57,13 @@ Aforementioned neural network with 2x2 linear layers could not reduce the loss l
 
 nn2.py is based on the same neural network representation, but it consists of 1x1 linear layers and the matrix multiplication part is done manually.
 
-This neural network could decrease the loss around 2, but the learned metric is somewhat filpped.
+Also, pi-only option is added to the output layer.
+
+Now, our modified output layer is
+
+<img src="https://render.githubusercontent.com/render/math?math=0=F\equiv \pi">.
+
+This neural network could decrease the loss around 3.2, but the learned metric is not accurate enough.
 
 Application on AdS Schwartzchild Black Hole
 --------------------------------
@@ -75,7 +81,7 @@ Data points for training are generated using the aforementioned neural network w
 
 Data points <img src="https://render.githubusercontent.com/render/math?math=[\phi(\eta_{\mathrm{ini}}),\pi(\eta_{\mathrm{ini}})] \in [0,1.5]\oplus[-0.2,0.2]"> are randomly generated. They are fed to the data generator and labeled as 'Positive' if <img src="https://render.githubusercontent.com/render/math?math=|F| < \epsilon">, and 'Negative' if <img src="https://render.githubusercontent.com/render/math?math=|F| > \epsilon"> where <img src="https://render.githubusercontent.com/render/math?math=\epsilon = 0.1">. Total 2000 data points are generated, 1000 for each class. Plot of the generated data points is shown in the figure below.
 
-![alt text](https://github.com/kcho9803/DL_and_AdS_CFT/blob/main/Figure_1.png?raw=true)
+![alt text](https://github.com/kcho9803/DL_and_AdS_CFT/blob/main/Dataset.png?raw=true)
 
 The model was learned using Adam optimizer.
 
@@ -91,9 +97,8 @@ Metric after training
 
 ![alt text](https://github.com/kcho9803/DL_and_AdS_CFT/blob/main/TrainedMetric.png?raw=true)
 
-Loss is decreased around 2, which is a large progress.
-However, the learned metric looks somewhat flipped, despite the small error.
-There must be some silly mistake in the code.
+Loss is decreased around 3.2, which is a large progress.
+However, the learned metric is not accurate enough.
 
 References
 ----------------------
