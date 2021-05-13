@@ -36,15 +36,15 @@ print('Initial metric extracted')
 
 # Set loss function & optimizer
 criterion = NN.L1Loss(reduction = 'sum')
-optimizer = optim.Adam(model.parameters(), lr = 0.003)
+optimizer = optim.Adam(model.parameters(), lr = 0.001)
 
-epochs = 3000
+epochs = 10000
 losses = []
 norms = []
 regs = []
-c_reg = 0.0003
+c_reg = 0.006
 
-test = True
+test = False
 
 # Training
 print('Beginning training sequence')
@@ -63,7 +63,7 @@ for curEpoch in range(epochs):
         for i in range(9):
             # regularizer += ((1-0.1*i)**4)*((model.layers[i+1].weight[1,1]-model.layers[i].weight[1,1])**2)
             regularizer += ((1-0.1*i)**4)*((model.layers[i+1].weight[0]-model.layers[i].weight[0])**2)
-        loss = criterion(y_pred.view_as(y), y) + c_reg * regularizer
+        loss = criterion(y_pred.view_as(y), y)**2 + c_reg * regularizer
         loss.backward()
         optimizer.step()
         batch_loss += loss.item()
@@ -114,6 +114,7 @@ height = width * 0.9
 
 # Plot loss
 fig1, ax1 = plt.subplots(figsize = (width, height))
+ax1.set_yscale('log')
 ax1.plot(np.arange(epochs)+1, losses, label = 'Loss')
 ax1.legend(loc = 'upper right')
 fig1.savefig(path+'TrainingLoss.png')
@@ -135,6 +136,7 @@ fig3.savefig(path+'InitialMetric.png')
 
 # Plot L1 norm
 fig4, ax4 = plt.subplots(figsize = (width, height))
+ax4.set_yscale('log')
 ax4.plot(np.arange(epochs)+1, norms, label = 'L1')
 ax4.legend(loc = 'upper right')
 fig4.savefig(path+'TrainingLoss_L1.png')

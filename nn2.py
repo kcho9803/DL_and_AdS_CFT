@@ -47,6 +47,7 @@ class Net(nn.Module):
 
 class genLayer(nn.Module):
 
+    pi_only = True
     stepSize = -0.1
     m2 = -1
 
@@ -54,11 +55,15 @@ class genLayer(nn.Module):
         super(genLayer, self).__init__()
     
     def forward(self, phi, pi):
-        F = 20 * pi - self.m2 * phi - torch.pow(phi, 3)
+        if self.pi_only:
+            F = pi
+        else:
+            F = 20 * pi - self.m2 * phi - torch.pow(phi, 3)
         return torch.abs(F)
 
 class outLayer(nn.Module):
 
+    pi_only = True
     stepSize = -0.1
     m2 = -1
 
@@ -66,5 +71,8 @@ class outLayer(nn.Module):
         super(outLayer, self).__init__()
 
     def forward(self, phi, pi):
-        F = 20 * pi - self.m2 * phi - torch.pow(phi, 3)
+        if self.pi_only:
+            F = pi
+        else:
+            F = 20 * pi - self.m2 * phi - torch.pow(phi, 3)
         return (torch.tanh(100*(F-0.1))-torch.tanh(100*(F+0.1))+2)/2

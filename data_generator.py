@@ -94,8 +94,8 @@ class GeneratedDataset(Dataset):
         fig, ax = plt.subplots(figsize = (width, height))
         temp1 = pos.numpy()
         temp2 = neg.numpy()
-        ax.scatter(temp1[:, 0], temp1[:, 1], label = 'Positive', marker = '.')
         ax.scatter(temp2[:, 0], temp2[:, 1], label = 'Negative', marker = '.')
+        ax.scatter(temp1[:, 0], temp1[:, 1], label = 'Positive', marker = '.')
         ax.legend(loc = 'upper right')
         fig.savefig(path+'Dataset.png')
         
