@@ -36,13 +36,13 @@ print('Initial metric extracted')
 
 # Set loss function & optimizer
 criterion = NN.L1Loss(reduction = 'sum')
-optimizer = optim.Adam(model.parameters(), lr = 0.001)
+optimizer = optim.Adam(model.parameters(), lr = 0.0009)
 
 epochs = 10000
 losses = []
 norms = []
 regs = []
-c_reg = 0.006
+c_reg = 9e-2
 
 test = False
 
@@ -60,9 +60,11 @@ for curEpoch in range(epochs):
             print(y)
             test = False
         regularizer = torch.zeros(1)
-        for i in range(9):
+        for i in range(8):
             # regularizer += ((1-0.1*i)**4)*((model.layers[i+1].weight[1,1]-model.layers[i].weight[1,1])**2)
-            regularizer += ((1-0.1*i)**4)*((model.layers[i+1].weight[0]-model.layers[i].weight[0])**2)
+            # regularizer += ((1-0.1*i)**4)*((model.layers[i+1].weight[0]-model.layers[i].weight[0])**2)
+            # regularizer += ((model.layers[i+2].weight[1,1]-2*model.layers[i+1].weight[1,1]+model.layers[i].weight[1,1]))**2
+            regularizer += ((model.layers[i+2].weight[0]-2*model.layers[i+1].weight[0]+model.layers[i].weight[0]))**2
         loss = criterion(y_pred.view_as(y), y)**2 + c_reg * regularizer
         loss.backward()
         optimizer.step()
@@ -71,7 +73,7 @@ for curEpoch in range(epochs):
         batch_reg += regularizer.item() * c_reg
         # Apply constraint
         # for layer in model.layers:
-        #     layer.weight = NN.Parameter(torch.Tensor([[1, -0.1],[0.1, layer.weight[1,1].item()]]))
+        #    layer.weight = NN.Parameter(torch.Tensor([[1, -0.1],[0.1, layer.weight[1,1].item()]]))
     losses.append(batch_loss)
     norms.append(batch_norm)
     regs.append(batch_reg)
