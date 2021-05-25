@@ -85,7 +85,7 @@ Data points <img src="https://render.githubusercontent.com/render/math?math=[\ph
 
 Loss function for the model is given as
 
-<img src="https://render.githubusercontent.com/render/math?math=Loss = \left[\sum_{batch} \left|\bar{y}_i - y_i\right|\right]^2 %2B c_{reg} \sum_{j=1}^{N-2} \left| W^{(j+2)}_{11} - 2W^{(j+1)}_{11} %2B W^{(j)}_{11} \right|">
+<img src="https://render.githubusercontent.com/render/math?math=Loss = \left[\sum_{batch} \left|\bar{y}_i - y_i\right|\right]^2 %2B c_{reg} \sum_{j=1}^{N-2} \left| W^{(j %2B 2)}_{11} - 2W^{(j %2B 1)}_{11} %2B W^{(j)}_{11} \right|">
 
 Where <img src="https://render.githubusercontent.com/render/math?math=N"> is the number of layers.
 The regularization term is modified from the original paper to reduce the rapid change of derivative of the metric.
