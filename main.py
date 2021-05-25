@@ -38,11 +38,11 @@ print('Initial metric extracted')
 criterion = NN.L1Loss(reduction = 'sum')
 optimizer = optim.Adam(model.parameters(), lr = 0.00005)
 
-epochs = 100000
+epochs = 150000
 losses = []
 norms = []
 regs = []
-c_reg = 1e-1
+c_reg = 0.15
 
 test = False
 
