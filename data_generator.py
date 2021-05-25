@@ -24,6 +24,8 @@ class GeneratedDataset(Dataset):
         n_neg = 0
         pos = torch.zeros(1000,2)
         neg = torch.zeros(1000,2)
+        out_pos = torch.zeros(1000)
+        out_neg = torch.zeros(1000)
         itr = 0
         test1 = True
         test2 = True
@@ -32,33 +34,35 @@ class GeneratedDataset(Dataset):
             pi_ini = np.random.uniform(low = -0.2, high = 0.2)
             rand_input = torch.Tensor([[phi_ini, pi_ini]])
             out = generator(rand_input)
-            if out < eps:
+            if torch.abs(out) < eps:
                 if n_pos < 1000:
                     if (n_pos+1)%50 == 0:
                         print('Data Generation: {}%'.format((n_pos+1)/10))
                     if test1:
                         print('Label = 0, out = {}'.format(out.item()))
                     pos[n_pos] = rand_input
+                    out_pos[n_pos] = out
                     n_pos += 1
-            elif out > eps:
+            elif torch.abs(out) > eps:
                 if n_neg < 1000:
                     if test2:
                         print('Label = 1, out = {}'.format(out.item()))
                     neg[n_neg] = rand_input
+                    out_neg[n_neg] = out
                     n_neg += 1
             if n_pos > 5:
                 test1 = False
             if n_neg > 5:
                 test2 = False
             itr += 1
-        self.y_data = torch.cat((torch.zeros(1000), torch.ones(1000)), dim = 0)
-        self.x_data = torch.cat((pos, neg), dim = 0)
+        self.y_data = torch.cat((out_pos, out_neg), dim = 0).detach()
+        self.x_data = torch.cat((pos, neg), dim = 0).detach()
         print('Dataset generated')
         # Save generated dataset
         df = pd.DataFrame(torch.cat((self.x_data, torch.transpose(self.y_data.unsqueeze(0),0,1)), dim = 1).numpy(), columns = ['phi','pi','label'])
         # Specify path
         path = 'E:\\Github\\DL_and_AdS_CFT\\'
-        df.to_csv(path+'generatedDataset.csv', sep = ',')
+        df.to_csv(path+'generatedDataset_pi.csv', sep = ',')
         print('Dataset saved')
         
         # Set variables for plotting
@@ -97,7 +101,7 @@ class GeneratedDataset(Dataset):
         ax.scatter(temp2[:, 0], temp2[:, 1], label = 'Negative', marker = '.')
         ax.scatter(temp1[:, 0], temp1[:, 1], label = 'Positive', marker = '.')
         ax.legend(loc = 'upper right')
-        fig.savefig(path+'Dataset.png')
+        fig.savefig(path+'Dataset_pi.png')
         
     def __len__(self):
         return list(self.x_data.size())[0]
@@ -111,7 +115,7 @@ class LoadedDataset(Dataset):
     def __init__(self):
         # Specify path
         path = 'E:\\Github\\DL_and_AdS_CFT\\'
-        savedDataset = pd.read_csv(path+'generatedDataset.csv', header = 0).to_numpy()
+        savedDataset = pd.read_csv(path+'generatedDataset_pi.csv', header = 0).to_numpy()
         print(savedDataset[0,:])
         self.x_data = torch.Tensor(savedDataset[:,1:3])
         print(savedDataset[0,1:3])

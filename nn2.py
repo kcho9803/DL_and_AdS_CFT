@@ -59,7 +59,8 @@ class genLayer(nn.Module):
             F = pi
         else:
             F = 20 * pi - self.m2 * phi - torch.pow(phi, 3)
-        return torch.abs(F)
+        # return torch.abs(F)
+        return F
 
 class outLayer(nn.Module):
 
@@ -75,4 +76,5 @@ class outLayer(nn.Module):
             F = pi
         else:
             F = 20 * pi - self.m2 * phi - torch.pow(phi, 3)
-        return (torch.tanh(100*(F-0.1))-torch.tanh(100*(F+0.1))+2)/2
+        # return (torch.tanh(100*(F-0.1))-torch.tanh(100*(F+0.1))+2)/2
+        return F

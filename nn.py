@@ -26,8 +26,9 @@ class outLayer(nn.Module):
     def forward(self, x):
         F = x[:,1]
         # F = 20*x[:,1] + x[:,0] - torch.pow(x[:,0], 3)
-        return (torch.tanh(100*(F-0.1))-torch.tanh(100*(F+0.1))+2)/2
+        # return (torch.tanh(100*(F-0.1))-torch.tanh(100*(F+0.1))+2)/2
         #return torch.abs(F)
+        return F
 
 # Customized output layer for data generation    
 class genLayer(nn.Module):
@@ -38,7 +39,8 @@ class genLayer(nn.Module):
     def forward(self, x):
         F = x[0,1]
         # F = 20*x[0,1] + x[0,0] - x[0,0]**3
-        return torch.abs(F)
+        # return torch.abs(F)
+        return F
 
 # Neural network, eta_ini = 1, eta_fin = 0.1, delta_eta = -0.1, N = 10
 class Net(nn.Module):
