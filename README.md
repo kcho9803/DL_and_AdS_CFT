@@ -63,8 +63,6 @@ Now, our modified output layer is
 
 <img src="https://render.githubusercontent.com/render/math?math=0=F\equiv \pi">.
 
-This neural network could decrease the loss around 3.2, but the learned metric is not accurate enough.
-
 Application on AdS Schwartzchild Black Hole
 --------------------------------
 
@@ -91,7 +89,7 @@ Where <img src="https://render.githubusercontent.com/render/math?math=N"> is the
 The regularization term is modified from the original paper to reduce the rapid change of derivative of the metric.
 The original regularizer tends to make the metric constant, rather than smoothing it, which seems that not following the purpose explained on the paper.
 
-The model was learned using Adam optimizer with 10000 epochs.
+The model was learned using Adam optimizer with 150000 epochs.
 
 Latest training loss
 
@@ -105,8 +103,7 @@ Metric after training
 
 ![alt text](https://github.com/kcho9803/DL_and_AdS_CFT/blob/main/TrainedMetric.png?raw=true)
 
-Loss is decreased around 3.2, which is a large progress.
-However, the learned metric is not accurate enough.
+Using the modified output layer, loss is decreased up to the order of <img src="https://render.githubusercontent.com/render/math?math=10^{-1}">.
 
 References
 ----------------------
